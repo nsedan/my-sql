@@ -8,8 +8,12 @@ connection = pymysql.connect(
 
 try:
     with connection.cursor() as cursor:
-        row = cursor.execute(
-            "DELETE FROM Friends WHERE name = %s;", 'Gunther')
+        list_of_friends = ['Joey', 'Phoebe', 'Rachel',
+                           'Monica', 'Ross', 'Chandler']
+        format_strings = ",".join(['%s']*len(list_of_friends))
+        cursor.execute(
+            "DELETE FROM Friends WHERE name in ({});".format(format_strings),
+            list_of_friends)
         connection.commit()
 finally:
     connection.close()
