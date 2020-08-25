@@ -1,5 +1,4 @@
 import os
-import datetime
 import pymysql
 
 username = os.getenv('C9_USER')
@@ -9,8 +8,14 @@ connection = pymysql.connect(
 
 try:
     with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-        cursor.execute(
-            "UPDATE Friends SET age = 30 WHERE name = 'Monica';")
+        rows = [(51, 'Joey'),
+                (52, 'Ross'),
+                (50, 'Rachel'),
+                (50, 'Monica'),
+                (53, 'Phoebe'),
+                (52, 'Chandler')]
+        cursor.executemany(
+            "UPDATE Friends SET age = %s WHERE name = %s;", rows)
         connection.commit()
 finally:
     connection.close()
